@@ -78,6 +78,8 @@ if (mongoURL == null) {
   }
 
   if (mongoHost && mongoPort && mongoDatabase) {
+
+    console.log('entro en el ultimo if ');
     mongoURLLabel = mongoURL = 'mongodb://';
     if (mongoUser && mongoPassword) {
       mongoURL += mongoUser + ':' + mongoPassword + '@';
@@ -87,6 +89,9 @@ if (mongoURL == null) {
     mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
   }
 }
+
+console.log(' despues del nulll -> imprimo mongodb de nuevo');
+console.log(mongoURL);
 var db = null,
     dbDetails = new Object();
 
