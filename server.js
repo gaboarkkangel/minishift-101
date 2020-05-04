@@ -2,8 +2,19 @@
 var express = require('express'),
     app     = express(),
     morgan  = require('morgan');
+const bodyParser = require('body-parser');
+const cors = require('cors');
     
 Object.assign=require('object-assign')
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(cors());
+
+
 
 app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
@@ -13,10 +24,21 @@ var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
     mongoURLLabel = "";
 
+    console.log(' ==== mongoURL');
+    console.log(mongoURL);
+
+    console.log('======= ip');
+    console.log(ip);
+
+
+
+
 if (mongoURL == null) {
   var mongoHost, mongoPort, mongoDatabase, mongoPassword, mongoUser;
   // If using plane old env vars via service discovery
   if (process.env.DATABASE_SERVICE_NAME) {
+      console.log(' // If using plane old env vars via service discovery');
+      
     var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase();
     mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'];
     mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'];
@@ -24,8 +46,18 @@ if (mongoURL == null) {
     mongoPassword = process.env[mongoServiceName + '_PASSWORD'];
     mongoUser = process.env[mongoServiceName + '_USER'];
 
+    console.log(mongoServiceName);
+    console.log(mongoHost);
+    console.log(mongoPort);
+    console.log(mongoDatabase);
+    console.log(mongoPassword);
+    console.log(mongoUser);
+
+
   // If using env vars from secret from service binding  
   } else if (process.env.database_name) {
+    console.log('// If using env vars from secret from service binding ');
+
     mongoDatabase = process.env.database_name;
     mongoPassword = process.env.password;
     mongoUser = process.env.username;
@@ -37,6 +69,12 @@ if (mongoURL == null) {
         mongoPort = mongoUriParts[1];
       }
     }
+    console.log(mongoHost);
+    console.log(mongoPort);
+    console.log(mongoDatabase);
+    console.log(mongoPassword);
+    console.log(mongoUser);
+
   }
 
   if (mongoHost && mongoPort && mongoDatabase) {
@@ -120,6 +158,6 @@ initDb(function(err){
 });
 
 app.listen(port, ip);
-console.log('Server running on http://%s:%s', ip, port);
+console.log('Imprime: Server running on http://%s:%s', ip, port);
 
 module.exports = app ;
